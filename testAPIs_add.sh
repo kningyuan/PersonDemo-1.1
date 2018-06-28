@@ -88,7 +88,7 @@ curl -s -X POST \
   -H "content-type: application/json" \
   -d '{
 	"channelName":"person1",
-	"channelConfigPath":"../artifacts/channel/person1.tx",
+	"channelConfigPath":"../artifacts/channel/person1.tx"
 }'
 echo
 echo
