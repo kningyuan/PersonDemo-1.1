@@ -48,9 +48,14 @@ services:
       service: zookeeper
     environment:
       - ZOO_MY_ID=1
+#      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888 quorumListenOnAllIPs:true
       - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
     volumes:
       - /var/hyperledger/z0/:/data/
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
 
 
 
@@ -61,9 +66,14 @@ services:
       service: zookeeper
     environment:
       - ZOO_MY_ID=2
+#      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888 quorumListenOnAllIPs:true
       - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
     volumes:
       - /var/hyperledger/z1/:/data/
+    ports:
+      - "3181:2181"
+      - "4888:2888"
+      - "5888:3888"
 
   zookeeper2:
     container_name: zookeeper2
@@ -72,9 +82,14 @@ services:
       service: zookeeper
     environment:
       - ZOO_MY_ID=3
+#      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888 quorumListenOnAllIPs:true
       - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
     volumes:
       - /var/hyperledger/z2/:/data/
+    ports:
+      - "4181:2181"
+      - "6888:2888"
+      - "7888:3888"
 
   kafka0:
     container_name: kafka0
@@ -85,6 +100,7 @@ services:
       - KAFKA_BROKER_ID=0
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.200:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
     volumes:
       - /var/hyperledger/kafka0:/tmp/kafka-logs/
@@ -92,6 +108,8 @@ services:
       - zookeeper0
       - zookeeper1
       - zookeeper2
+    ports:
+      - "9092:9092"
 
   kafka1:
     container_name: kafka1
@@ -102,6 +120,7 @@ services:
       - KAFKA_BROKER_ID=1
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.200:10092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
     volumes:
       - /var/hyperledger/kafka1:/tmp/kafka-logs/
@@ -109,6 +128,8 @@ services:
       - zookeeper0
       - zookeeper1
       - zookeeper2
+    ports:
+      - "10092:9092"
 
   kafka2:
     container_name: kafka2
@@ -119,6 +140,7 @@ services:
       - KAFKA_BROKER_ID=2
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.200:11092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
     volumes:
       - /var/hyperledger/kafka2:/tmp/kafka-logs/
@@ -126,6 +148,8 @@ services:
       - zookeeper0
       - zookeeper1
       - zookeeper2
+    ports:
+      - "11092:9092"
 
   kafka3:
     container_name: kafka3
@@ -136,6 +160,7 @@ services:
       - KAFKA_BROKER_ID=3
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.200:12092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
     volumes:
       - /var/hyperledger/kafka3:/tmp/kafka-logs/
@@ -143,6 +168,8 @@ services:
       - zookeeper0
       - zookeeper1
       - zookeeper2
+    ports:
+      - "12092:9092"
 
   orderer0.example.com:
     container_name: orderer0.example.com
@@ -150,6 +177,7 @@ services:
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
@@ -180,6 +208,7 @@ services:
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=8050
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
@@ -210,6 +239,7 @@ services:
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=9050
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
@@ -313,3 +343,37 @@ services:
       - orderer0.example.com
       - orderer1.example.com
       - orderer2.example.com
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+#      - CORE_LOGGING_LEVEL=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./channel:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer0.example.com
+      - orderer1.example.com
+      - orderer2.example.com
+      - peer0.org1.example.com
+      - peer1.org1.example.com
+      - peer0.org2.example.com
+      - peer1.org2.example.com
