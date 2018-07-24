@@ -115,7 +115,7 @@ var getRegisteredUser = async function(username, userOrg, isJson) {
 
 
 var setupChaincodeDeploy = function() {
-	logger.error(typeof( hfc.getConfigSetting("CC_SRC_PATH")))
+//	logger.error(typeof( hfc.getConfigSetting("CC_SRC_PATH")))
 	process.env.GOPATH = path.join(__dirname, hfc.getConfigSetting('CC_SRC_PATH'));
 	
 };
