@@ -72,7 +72,7 @@ var invokeChaincode = async function(peerNames, channelName, chaincodeName, fcn,
 			}
 			all_good = all_good & one_good;
 		}
-		var t_msg = proposalResponses[0].details
+		var t_msg = proposalResponses[1].response.message
 
 		if (all_good) {
 			logger.info(util.format(
@@ -156,6 +156,7 @@ var invokeChaincode = async function(peerNames, channelName, chaincodeName, fcn,
 		} else {
 			error_message = util.format('Failed to send Proposal and receive all good ProposalResponse');
 			logger.debug(error_message);
+			logger.debug(t_msg);
 			return t_msg 
 		}
 	} catch (error) {
